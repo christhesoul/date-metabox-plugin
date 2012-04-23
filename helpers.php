@@ -21,6 +21,30 @@ function the_end_date($id = "default"){
 	echo get_the_meta_date($id, false);
 }
 
+function the_date_range($id = "default"){
+	$starts = get_the_meta_date($id,true);
+	$ends = get_the_meta_date($id,false);
+	$start_unix = get_the_meta_unix($id,true);
+	$end_unix = get_the_meta_unix($id,false);
+	
+	if($start_unix == $end_unix){
+		echo get_the_meta_date($id);
+	} else {
+		if(date('m',$start_unix) == date('m',$end_unix)){
+			if(date('j',$start_unix) + 1 == date('j',$end_unix)){
+				/* If months are the same and dates are one day apart, produce the following format 13 & 14 April 2012 */
+				echo date('j',$start_unix) . ' &amp; ' . $ends;
+			} else {
+				/* If months are the same, produce the following format 11 – 13 April 2012 */
+				echo date('j',$start_unix) . ' &mdash; ' . $ends;
+			}
+		} else if(date('Y',$start_unix) == date('Y',$end_unix)) {
+			/* If years are the same, product the following format 11 April – 25 May 2012 */
+			echo date('j F',$start_unix) . ' &mdash; ' . $ends;
+		}
+	}
+}
+
 function get_the_meta_time($id = "default", $is_start_time = true){
 	if($id == "default"){
   	$id = get_the_ID();
